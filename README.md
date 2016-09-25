@@ -6,6 +6,19 @@ An extension to use [Hystrix](https://github.com/Netflix/Hystrix) in a JEE envir
 
 [![Code Coverage](https://img.shields.io/codecov/c/github/sventorben/hystrix-jee/master.svg)](https://codecov.io/github/sventorben/hystrix-jee?branch=master)
 
+## How to use
+
+Simply add the Maven dependency (see below) to use the default [ManagedThreadFactory](https://docs.oracle.com/javaee/7/api/javax/enterprise/concurrent/ManagedThreadFactory.html) available via ```java:comp/DefaultManagedThreadFactory```
+
+If you want to configure your own ManagedThreadFactory you need to make it available via JNDI and pass the JNDI name to a context parameter in your web.xml like this:
+
+```
+<context-param>
+    <param-name>de.sven_torben.hystrix_jee.ManagedThreadFactory.jndi</param-name>
+    <param-value>java:jboss/ee/concurrency/factory/default</param-value>
+</context-param>
+```
+
 ## Maven Coordinates
 
 The latest RELEASE is available via Maven Central.
@@ -14,7 +27,7 @@ The latest RELEASE is available via Maven Central.
     <dependency>
         <groupId>de.sven-torben.hystrix-jee</groupId>
         <artifactId>hystrix-jee</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
     </dependency>
 ```
 

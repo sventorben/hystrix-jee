@@ -5,17 +5,12 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import com.netflix.hystrix.HystrixThreadPoolKey;
 import com.netflix.hystrix.strategy.properties.HystrixProperty;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
@@ -26,49 +21,47 @@ import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-@RunWith(MockitoJUnitRunner.class)
 public class JeeHystrixConcurrencyStrategyTest {
 
-  InitialContext context = mock(InitialContext.class);
+  private InitialContext context = mock(InitialContext.class);
 
   @Rule
   public InitialContextRule initialContextRule = new InitialContextRule(context);
 
-  @Mock
-  ManagedThreadFactory expectedThreadFactory;
-
-  @InjectMocks
-  JeeHystrixConcurrencyStrategy cut = new JeeHystrixConcurrencyStrategy();
+  private ManagedThreadFactory defaultManagedThreadFactory = mock(ManagedThreadFactory.class);
+  private ManagedThreadFactory testFactory = mock(ManagedThreadFactory.class);
 
   @Before
   public void setUp() throws NamingException {
-    given(context.lookup("testFactory")).willReturn(expectedThreadFactory);
+    given(context.lookup("java:comp/DefaultManagedThreadFactory"))
+        .willReturn(defaultManagedThreadFactory);
   }
 
   @Test
-  public void testDefaultThreadFactory() {
+  public void testDefaultThreadFactory() throws NamingException {
+    JeeHystrixConcurrencyStrategy cut = new JeeHystrixConcurrencyStrategy();
     ThreadPoolExecutor threadPoolExecutor = getThreadPool(cut);
-    assertThat(threadPoolExecutor.getThreadFactory(), sameInstance(expectedThreadFactory));
+    assertThat(threadPoolExecutor.getThreadFactory(), sameInstance(defaultManagedThreadFactory));
   }
 
   @Test
   public void testJndiLookup() throws NamingException {
+    given(context.lookup("testFactory")).willReturn(testFactory );
     JeeHystrixConcurrencyStrategy cut = new JeeHystrixConcurrencyStrategy("testFactory");
-    verify(context).lookup("testFactory");
     ThreadPoolExecutor threadPoolExecutor = getThreadPool(cut);
-    assertThat(threadPoolExecutor.getThreadFactory(), sameInstance(expectedThreadFactory));
+    assertThat(threadPoolExecutor.getThreadFactory(), sameInstance(testFactory ));
   }
 
   @Test
   public void testThreadFactory() {
-    JeeHystrixConcurrencyStrategy cut = new JeeHystrixConcurrencyStrategy(expectedThreadFactory);
+    JeeHystrixConcurrencyStrategy cut = new JeeHystrixConcurrencyStrategy(testFactory);
     ThreadPoolExecutor threadPoolExecutor = getThreadPool(cut);
-    assertThat(threadPoolExecutor.getThreadFactory(), sameInstance(expectedThreadFactory));
+    assertThat(threadPoolExecutor.getThreadFactory(), sameInstance(testFactory));
   }
 
   @Test
-  public void testWrapCallable() {
-    Callable<Object> callable = cut.wrapCallable(() -> {
+  public void testWrapCallable() throws NamingException {
+    Callable<Object> callable = new JeeHystrixConcurrencyStrategy().wrapCallable(() -> {
       return null;
     });
     assertThat(callable, instanceOf(ManagedTask.class));

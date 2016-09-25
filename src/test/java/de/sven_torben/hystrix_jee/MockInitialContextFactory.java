@@ -14,11 +14,11 @@ public class MockInitialContextFactory implements InitialContextFactory {
     return CURRENT_CONTEXT.get();
   }
 
-  public static void setCurrentContext(Context context) {
+  static void setCurrentContext(Context context) {
     CURRENT_CONTEXT.set(context);
   }
 
-  public static void clearCurrentContext() {
+  static void clearCurrentContext() {
     CURRENT_CONTEXT.remove();
   }
 }

@@ -9,7 +9,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutors;
 import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.naming.InitialContext;
@@ -17,10 +16,11 @@ import javax.naming.NamingException;
 
 public class JeeHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
 
-  @Resource(mappedName = "java:comp/DefaultManagedThreadFactory")
   private ManagedThreadFactory mtf;
 
-  public JeeHystrixConcurrencyStrategy() {}
+  public JeeHystrixConcurrencyStrategy() throws NamingException {
+    this("java:comp/DefaultManagedThreadFactory");
+  }
 
   public JeeHystrixConcurrencyStrategy(String mappedName) throws NamingException {
     InitialContext initialContext = new InitialContext();

@@ -7,11 +7,11 @@ import org.junit.runners.model.Statement;
 
 import javax.naming.Context;
 
-public class InitialContextRule implements TestRule {
+class InitialContextRule implements TestRule {
 
   private final Context context;
 
-  public InitialContextRule(Context context) {
+  InitialContextRule(Context context) {
     this.context = context;
   }
 
