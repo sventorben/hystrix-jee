@@ -4,7 +4,7 @@
 
     <groupId>de.sven-torben.hystrix-jee</groupId>
     <artifactId>hystrix-jee</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>An extension to run Hystrix on JEE.</description>
@@ -62,7 +62,7 @@
         <url>git@github.com:sventorben/hystrix-jee.git</url>
         <connection>scm:git:git://github.com/sventorben/hystrix-jee.git</connection>
         <developerConnection>scm:git:git@github.com:sventorben/hystrix-jee.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>0.0.2</tag>
     </scm>
 
     <licenses>
