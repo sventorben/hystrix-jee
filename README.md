@@ -2,6 +2,10 @@
 
 An extension to use [Hystrix](https://github.com/Netflix/Hystrix) in a JEE environment.
 
+[![Build Status](https://travis-ci.org/sventorben/hystrix-jee.svg?branch=master)](https://travis-ci.org/sventorben/hystrix-jee)
+
+[![Code Coverage](https://img.shields.io/codecov/c/github/sventorben/hystrix-jee/master.svg)](https://codecov.io/github/sventorben/hystrix-jee?branch=master)
+
 ## Maven Coordinates
 
 
